@@ -111,6 +111,7 @@ Based on Material Design 3 dark theme with an editorial aesthetic:
 - **Fonts**: Manrope (headlines) + Inter (body)
 - **No borders** — surfaces are defined by tonal layering
 - **Glass & gradient** CTAs with pill-shaped buttons
+- **Centered Floating Action Navigation** for quick transaction additions
 
 ## 🔐 Security
 
