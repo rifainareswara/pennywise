@@ -14,8 +14,14 @@
 
 <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-end px-4 pb-6 bg-[#131313]/60 backdrop-blur-xl rounded-t-[24px] shadow-[0_-8px_32px_rgba(46,204,113,0.04)]">
   {#each tabs as tab}
-    {#if tab.isPlaceholder}
-      <div class="w-12 h-12 invisible"></div>
+      {#if tab.isPlaceholder}
+        <div class="w-12 h-12 invisible"></div>
+        <a 
+          href={tab.href}
+          class="absolute left-1/2 bottom-6 -translate-x-1/2 w-[60px] h-[60px] bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full shadow-2xl shadow-primary/30 flex items-center justify-center active:scale-95 transition-all duration-300 group z-[60]"
+        >
+          <span class="material-symbols-outlined text-[36px] group-hover:rotate-90 transition-transform duration-300">{tab.icon}</span>
+        </a>
     {:else}
       <a href={tab.href} class="flex flex-col items-center group">
         {#if currentPath === tab.href || (tab.href !== '/' && currentPath.startsWith(tab.href))}
