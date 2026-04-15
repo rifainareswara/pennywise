@@ -1,0 +1,5 @@
+/Users/rifai/Github/pennywise/backend/target/debug/build/thiserror-e251470363de1264/build_script_build-e251470363de1264.d: /Users/rifai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/build.rs
+
+/Users/rifai/Github/pennywise/backend/target/debug/build/thiserror-e251470363de1264/build_script_build-e251470363de1264: /Users/rifai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/build.rs
+
+/Users/rifai/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/build.rs:

@@ -1,0 +1,160 @@
+@import "tailwindcss";
+
+/* ===== Design System Custom Tokens ===== */
+@theme {
+  /* Primary */
+  --color-primary: #54e98a;
+  --color-primary-container: #2ecc71;
+  --color-primary-fixed: #6bfe9c;
+  --color-primary-fixed-dim: #4ae183;
+  --color-on-primary: #003919;
+  --color-on-primary-container: #005027;
+  --color-on-primary-fixed: #00210c;
+  --color-on-primary-fixed-variant: #005228;
+  --color-inverse-primary: #006d37;
+
+  /* Secondary */
+  --color-secondary: #ffb4a9;
+  --color-secondary-container: #950c09;
+  --color-secondary-fixed: #ffdad5;
+  --color-secondary-fixed-dim: #ffb4a9;
+  --color-on-secondary: #690001;
+  --color-on-secondary-container: #ff9f91;
+  --color-on-secondary-fixed: #410000;
+  --color-on-secondary-fixed-variant: #910807;
+
+  /* Tertiary */
+  --color-tertiary: #ffc0ac;
+  --color-tertiary-container: #ff9875;
+  --color-tertiary-fixed: #ffdbd0;
+  --color-tertiary-fixed-dim: #ffb59d;
+  --color-on-tertiary: #5b1a02;
+  --color-on-tertiary-container: #772e14;
+  --color-on-tertiary-fixed: #390c00;
+  --color-on-tertiary-fixed-variant: #793015;
+
+  /* Error */
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-on-error: #690005;
+  --color-on-error-container: #ffdad6;
+
+  /* Surface */
+  --color-surface: #131313;
+  --color-surface-dim: #131313;
+  --color-surface-bright: #393939;
+  --color-surface-container: #201f1f;
+  --color-surface-container-low: #1c1b1b;
+  --color-surface-container-high: #2a2a2a;
+  --color-surface-container-highest: #353534;
+  --color-surface-container-lowest: #0e0e0e;
+  --color-surface-variant: #353534;
+  --color-surface-tint: #4ae183;
+  --color-on-surface: #e5e2e1;
+  --color-on-surface-variant: #bbcbbb;
+  --color-inverse-surface: #e5e2e1;
+  --color-inverse-on-surface: #313030;
+
+  /* Background */
+  --color-background: #131313;
+  --color-on-background: #e5e2e1;
+
+  /* Outline */
+  --color-outline: #869486;
+  --color-outline-variant: #3d4a3e;
+
+  /* Fonts */
+  --font-headline: "Manrope", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-label: "Inter", sans-serif;
+
+  /* Border Radius */
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+}
+
+/* ===== Global Styles ===== */
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+  min-height: 100dvh;
+}
+
+h1, h2, h3, .font-headline {
+  font-family: var(--font-headline);
+}
+
+/* Material Symbols Icons */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Editorial Gradient - Primary CTA */
+.editorial-gradient {
+  background: linear-gradient(135deg, #54e98a 0%, #2ecc71 100%);
+}
+
+/* Glass Overlay */
+.glass-overlay {
+  background: rgba(19, 19, 19, 0.6);
+  backdrop-filter: blur(20px);
+}
+
+/* Glass Blur */
+.glass-blur {
+  backdrop-filter: blur(20px);
+}
+
+/* Mesh Background for Landing */
+.mesh-background {
+  background-color: #131313;
+  background-image:
+    radial-gradient(at 0% 0%, rgba(84, 233, 138, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(46, 204, 113, 0.03) 0px, transparent 50%);
+}
+
+/* Tonal Transition */
+.tonal-transition {
+  background: linear-gradient(to bottom, #131313, #1c1b1b);
+}
+
+/* Editorial Shadow */
+.editorial-shadow {
+  box-shadow: 0 32px 48px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Hide Scrollbar */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Smooth Page Transitions */
+.page-transition {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Toast animation */
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toastOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-20px); }
+}
