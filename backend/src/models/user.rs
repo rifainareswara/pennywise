@@ -40,6 +40,14 @@ pub struct UpdateProfileInput {
     pub name: String,
 }
 
+#[derive(Debug, Deserialize, Validate)]
+pub struct UpdatePasswordInput {
+    #[validate(length(min = 1, message = "Old password is required"))]
+    pub old_password: String,
+    #[validate(length(min = 8, message = "New password must be at least 8 characters"))]
+    pub new_password: String,
+}
+
 #[derive(Debug, Serialize)]
 pub struct AuthResponse {
     pub token: String,

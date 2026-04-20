@@ -5,7 +5,7 @@ use validator::Validate;
 use crate::{
     config::Config,
     errors::AppError,
-    models::user::{AuthResponse, LoginInput, RegisterInput, UpdateProfileInput, UserResponse},
+    models::user::{AuthResponse, LoginInput, RegisterInput, UpdateProfileInput, UpdatePasswordInput, UserResponse},
     repositories::user as user_repo,
     services::auth::{create_token, hash_password, verify_password},
     middleware::auth::AuthUser,
@@ -75,7 +75,6 @@ pub async fn update_profile(
 ) -> Result<Json<UserResponse>, AppError> {
     input.validate().map_err(|e| AppError::BadRequest(e.to_string()))?;
 
-    // Make sure user exists
     let _ = user_repo::find_by_id(&pool, auth.user_id)
         .await?
         .ok_or_else(|| AppError::NotFound("User not found".into()))?;
@@ -85,4 +84,28 @@ pub async fn update_profile(
         .map_err(|_| AppError::Internal("Database error".into()))?;
 
     Ok(Json(UserResponse::from(updated_user)))
+}
+
+pub async fn update_password(
+    Extension(pool): Extension<PgPool>,
+    Extension(auth): Extension<AuthUser>,
+    Json(input): Json<UpdatePasswordInput>,
+) -> Result<Json<serde_json::Value>, AppError> {
+    input.validate().map_err(|e| AppError::BadRequest(e.to_string()))?;
+
+    let user = user_repo::find_by_id(&pool, auth.user_id)
+        .await?
+        .ok_or_else(|| AppError::NotFound("User not found".into()))?;
+
+    let is_valid = verify_password(&input.old_password, &user.password_hash)?;
+    if !is_valid {
+        return Err(AppError::BadRequest("Password lama tidak sesuai".into()));
+    }
+
+    let new_password_hash = hash_password(&input.new_password)?;
+    user_repo::update_password(&pool, auth.user_id, &new_password_hash)
+        .await
+        .map_err(|_| AppError::Internal("Gagal mengupdate password".into()))?;
+
+    Ok(Json(serde_json::json!({ "message": "Password berhasil diperbarui" })))
 }

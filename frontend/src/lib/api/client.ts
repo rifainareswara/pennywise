@@ -74,6 +74,10 @@ export const authApi = {
   login: (data: { email: string; password: string }) =>
     api<{ token: string; user: User }>('/auth/login', { method: 'POST', body: data }),
   profile: () => api<User>('/auth/profile'),
+  updateProfile: (data: { name: string }) => 
+    api<User>('/auth/profile', { method: 'PUT', body: data }),
+  updatePassword: (data: { old_password: string; new_password: string }) =>
+    api<{ message: string }>('/auth/password', { method: 'PUT', body: data }),
 };
 
 // Transactions API

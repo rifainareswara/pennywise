@@ -38,6 +38,7 @@ async fn main() {
     let protected_routes = Router::new()
         .route("/api/auth/profile", get(handlers::auth::profile))
         .route("/api/auth/profile", put(handlers::auth::update_profile))
+        .route("/api/auth/password", put(handlers::auth::update_password))
         .route("/api/transactions", get(handlers::transactions::list))
         .route("/api/transactions", post(handlers::transactions::create))
         .route("/api/transactions/{id}", get(handlers::transactions::get_one))
@@ -47,6 +48,11 @@ async fn main() {
         .route("/api/budgets", post(handlers::budgets::create))
         .route("/api/budgets/{id}", delete(handlers::budgets::delete))
         .route("/api/dashboard/summary", get(handlers::dashboard::summary))
+        .route("/api/tasks", get(handlers::tasks::list))
+        .route("/api/tasks", post(handlers::tasks::create))
+        .route("/api/tasks/{id}", get(handlers::tasks::get))
+        .route("/api/tasks/{id}", put(handlers::tasks::update))
+        .route("/api/tasks/{id}", delete(handlers::tasks::delete))
         .layer(from_fn(middleware::auth::auth_middleware));
 
     let app = Router::new()

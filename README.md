@@ -84,7 +84,11 @@ docker compose up --build -d
 | Add Transaction | `/transactions/new` | Form with category grid |
 | Edit Transaction | `/transactions/:id/edit` | Edit + delete |
 | Budget | `/budget` | Circular progress, category breakdown (add, edit, delete) |
-| Profile | `/profile` | User info, settings, logout |
+| Profile Main | `/profile` | User info menu, logout |
+| Edit Profile | `/profile/edit` | Change User Name |
+| Keamanan | `/profile/security` | Update Password with Argon2 hashing |
+| Notifikasi | `/profile/notifications` | Local push notification preferences |
+| Bantuan | `/profile/help` | FAQ accordion |
 
 ## 🔌 API Endpoints
 
@@ -93,6 +97,8 @@ docker compose up --build -d
 | POST | `/api/auth/register` | No | Register |
 | POST | `/api/auth/login` | No | Login → JWT |
 | GET | `/api/auth/profile` | Yes | Current user |
+| PUT | `/api/auth/profile` | Yes | Edit User Name |
+| PUT | `/api/auth/password` | Yes | Change Password (Argon2 validation) |
 | GET | `/api/transactions` | Yes | List (search, filter, pagination) |
 | POST | `/api/transactions` | Yes | Create |
 | GET | `/api/transactions/:id` | Yes | Get one |
@@ -102,6 +108,7 @@ docker compose up --build -d
 | POST | `/api/budgets` | Yes | Create/upsert |
 | DELETE | `/api/budgets/:id` | Yes | Delete budget |
 | GET | `/api/dashboard/summary` | Yes | Aggregated dashboard data |
+| GET/POST/PUT/DEL | `/api/tasks` | Yes | Smart Task CRUD Operations |
 
 ## 🎨 Design System
 
@@ -129,3 +136,18 @@ Based on Material Design 3 dark theme with an editorial aesthetic:
 | Database | PostgreSQL 16, SQLx |
 | Auth | Argon2, JWT |
 | DevOps | Docker, Docker Compose |
+
+## 🔖 Release & Versioning
+
+PennyWise Frontend utilizes a **Dynamic Semantic Versioning** setup attached to SvelteKit's environment configurations.
+
+To bump the version of the application (which will instantly update the versions displayed across the in-app Profile and Help screens without hardcoding):
+
+1. Open a terminal and navigate to the `frontend/` directory.
+2. Run standard NPM commands:
+   ```bash
+   npm version patch  # -> for minor bugfixes (e.g. 1.0.0 to 1.0.1)
+   npm version minor  # -> for new features  (e.g. 1.0.0 to 1.1.0)
+   npm version major  # -> for massive shifts (e.g. 1.0.0 to 2.0.0)
+   ```
+3. Re-build the stack (`docker compose up --build -d`) to re-sync `import.meta.env` and apply the new version globally.

@@ -73,9 +73,57 @@ let protected_routes = Router::new()
 ---
 
 ## Tahap 2: Frontend (Membangun Antarmuka Svelte)
-Tahap ini belum kita kerjakan (menunggu arahan selanjutnya).
 
-Secara garis besar, nanti kita akan membuat hal berikut:
-1. `EditProfile.svelte`: Halaman visual dengan kolom input teks bertuliskan nama.
-2. `authApi.updateProfile()`: Menyolder kabel khusus yang berisi fungsi Fetch API ke titik rute `PUT /api/auth/profile`.
-3. Mengganti isi penyimpanan frontend (`auth Store`) agar nama di seluruh aplikasi PennyWise seketika berubah mengikuti nama yang baru diedit!
+Pada tahap ini kita merajut sistem API agar tombol-tombol di layar HP benar-benar hidup.
+
+### 1. API Client - `frontend/src/lib/api/client.ts`
+Kita butuh jembatan penghubung yang bisa mengirimkan `JSON` yang dibuat oleh Backend di Tahap 1.
+```typescript
+  updateProfile: (data: { name: string }) => 
+    api<User>('/auth/profile', { method: 'PUT', body: data }),
+```
+
+### 2. Svelte View - `frontend/src/routes/(app)/profile/edit/+page.svelte`
+Buatlah formulir dengan `<input bind:value={name}>`. Svelte 5 menggunakan sistem `$state` yang sangat reaktif (cepat merespon ketikan Anda).
+```svelte
+<script lang="ts">
+  import { user } from '$lib/stores/auth';
+  import { authApi } from '$lib/api/client';
+  
+  let name = $state($user?.name || '');
+
+  async function handleSave(e: Event) {
+    e.preventDefault();
+    const updatedUser = await authApi.updateProfile({ name });
+    
+    // Perbarui profil di atas layar secara magis
+    user.set(updatedUser);
+  }
+</script>
+
+<form onsubmit={handleSave}>
+   <input bind:value={name} type="text" required />
+   <button type="submit">Simpan</button>
+</form>
+```
+*Penjelasan:* Begitu fungsi `authApi.updateProfile` memanggil `PUT`, ia mencetak profil *terupdate*. Kita memanggil `user.set()` milik penyimpanan (Store) Svelte, dan _Voila_, semua huruf nama Anda di dalam aplikasi PennyWise otomatis terganti secara instan (Reaktivitas Data)!
+
+---
+
+## Tahap 3: Fitur Ganti Sandi (Tingkat Lanjut Keamanan/Kriptografi)
+
+Banyak yang bertanya, "Lalu bagaimana jika saya ingin melakukan pergantian *Password*?" Prosesnya cukup identik, namun ada elemen validasi Argon2 (Library Kriptografi untuk Password).
+
+1. **(Backend Model)** Server **wajib** meminta 2 data: `old_password` dan `new_password`.
+2. **(Backend Handler)** Anda TIDAK AKAN PERNAH menggunakan instruksi update secara normal! Server diwajibkan memeriksa *hash* `old_password` dari database melawan hasil kriptografi *password* yang baru dicetak dari keyboard sang pengguna via fungsi `verify_password()`.
+3. **(Penyimpanan Rahasia)** Jika cocok, hash lama dibuang dan hash baru di simpan melalui Argon2 yang dienkripsi berlapis (Salting + Hashing).
+```rust
+    // Verify old password (Argon2)
+    let is_valid = verify_password(&input.old_password, &user.password_hash)?;
+    if !is_valid {
+        return Err(AppError::BadRequest("Password lama tidak sesuai".into()));
+    }
+```
+4. **(Frontend UI)** Formulir ini dapat ditemukan di `frontend/src/routes/(app)/profile/security/+page.svelte` yang memantau `<input type="password">` dan mencocokannya dengan isian 'Konfirmasi Sandi'. Tidak ada pergantian *state* global Svelte (`user.set`) karena kata sandi bukan data yang diamankan / dikirimkan oleh API ke client Svelte untuk mencegah kebocoran *Plain-text*.
+
+Begitulah panduan Arsitektur Autentikasi dan Profil yang kokoh ini. Selamat mencoba modifikasinya!

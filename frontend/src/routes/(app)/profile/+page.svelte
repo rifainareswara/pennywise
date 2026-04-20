@@ -3,6 +3,7 @@
   import { user, logout } from '$lib/stores/auth';
   import { addToast } from '$lib/stores/ui';
   import { goto } from '$app/navigation';
+  import { version } from '$app/environment';
 
   function handleLogout() {
     logout();
@@ -29,7 +30,7 @@
 
   <!-- Profile Options -->
   <section class="space-y-3">
-    <div class="bg-surface-container-high rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-highest transition-colors">
+    <a href="/profile/edit" class="block bg-surface-container-high rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-highest transition-colors active:scale-[0.98]">
       <div class="flex items-center gap-4">
         <div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface-variant">
           <span class="material-symbols-outlined">person</span>
@@ -37,9 +38,9 @@
         <span class="text-on-surface font-medium">Edit Profil</span>
       </div>
       <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
-    </div>
+    </a>
 
-    <div class="bg-surface-container-high rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-highest transition-colors">
+    <a href="/profile/notifications" class="block bg-surface-container-high rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-highest transition-colors active:scale-[0.98]">
       <div class="flex items-center gap-4">
         <div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface-variant">
           <span class="material-symbols-outlined">notifications</span>
@@ -47,9 +48,9 @@
         <span class="text-on-surface font-medium">Notifikasi</span>
       </div>
       <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
-    </div>
+    </a>
 
-    <div class="bg-surface-container-high rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-highest transition-colors">
+    <a href="/profile/security" class="block bg-surface-container-high rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-highest transition-colors active:scale-[0.98]">
       <div class="flex items-center gap-4">
         <div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface-variant">
           <span class="material-symbols-outlined">lock</span>
@@ -57,9 +58,9 @@
         <span class="text-on-surface font-medium">Keamanan</span>
       </div>
       <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
-    </div>
+    </a>
 
-    <div class="bg-surface-container-high rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-highest transition-colors">
+    <a href="/profile/help" class="block bg-surface-container-high rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-highest transition-colors active:scale-[0.98]">
       <div class="flex items-center gap-4">
         <div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface-variant">
           <span class="material-symbols-outlined">help</span>
@@ -67,7 +68,7 @@
         <span class="text-on-surface font-medium">Bantuan</span>
       </div>
       <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
-    </div>
+    </a>
   </section>
 
   <!-- Logout -->
@@ -83,7 +84,7 @@
   <!-- App Info -->
   <div class="text-center mb-8">
     <p class="text-[10px] uppercase tracking-widest text-on-surface-variant/40 font-label font-medium">
-      PennyWise · v1.0.0
+      PennyWise · v{version}
     </p>
   </div>
 </main>

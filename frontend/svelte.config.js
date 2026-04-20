@@ -1,5 +1,7 @@
-// Ganti adapter-auto ke adapter-node
 import adapter from '@sveltejs/adapter-node';
+import { readFileSync } from 'fs';
+
+const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8'));
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -7,8 +9,10 @@ const config = {
         runes: ({ filename }) => (filename.split(/[/\\]/).includes('node_modules') ? undefined : true)
     },
     kit: {
-        // Sekarang adapter ini akan menghasilkan folder 'build' yang kompatibel dengan Node.js
-        adapter: adapter()
+        adapter: adapter(),
+        version: {
+            name: pkg.version
+        }
     }
 };
 

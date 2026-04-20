@@ -45,3 +45,17 @@ pub async fn update_name(
     .fetch_one(pool)
     .await
 }
+
+pub async fn update_password(
+    pool: &PgPool,
+    id: Uuid,
+    new_password_hash: &str,
+) -> Result<User, sqlx::Error> {
+    sqlx::query_as::<_, User>(
+        "UPDATE users SET password_hash = $1, updated_at = NOW() WHERE id = $2 RETURNING *"
+    )
+    .bind(new_password_hash)
+    .bind(id)
+    .fetch_one(pool)
+    .await
+}

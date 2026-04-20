@@ -9,11 +9,11 @@
 <header class="w-full top-0 sticky z-50 bg-[#131313] flex justify-between items-center px-6 py-4">
   <div class="flex items-center gap-3">
     {#if showAvatar}
-      <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high flex items-center justify-center active:scale-95 duration-200">
+      <a href="/profile" class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high flex items-center justify-center active:scale-95 duration-200">
         <div class="w-full h-full bg-primary/20 flex items-center justify-center">
           <span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">person</span>
         </div>
-      </div>
+      </a>
     {/if}
     <div>
       {#if showAvatar}
