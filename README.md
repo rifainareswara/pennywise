@@ -120,12 +120,27 @@ Based on Material Design 3 dark theme with an editorial aesthetic:
 - **Glass & gradient** CTAs with pill-shaped buttons
 - **Centered Floating Action Navigation** for quick transaction additions
 
-## 🔐 Security
+## 🔐 Security & Authentication
 
-- **Argon2** password hashing
+- **Argon2** password hashing for native credentials
 - **JWT** Bearer token authentication (24h expiry)
 - **CORS** configured for frontend origin
 - **Input validation** on all endpoints
+
+### 🌐 Social Login (OAuth) - Placeholder
+The login and registration interfaces currently feature buttons for **Google** and **Facebook** Single Sign-On (SSO). These features are visually complete but temporarily deactivated pending API credentials.
+
+**Prerequisites for Activation:**
+When you are ready to fulfill the requirements, you must obtain the following keys from their respective developer consoles and append them to your `.env` file:
+```env
+# OAuth Secrets Needed
+GOOGLE_CLIENT_ID=your_google_client_id_here
+GOOGLE_CLIENT_SECRET=your_google_client_secret_here
+
+FACEBOOK_APP_ID=your_facebook_app_id_here
+FACEBOOK_APP_SECRET=your_facebook_secret_here
+```
+Once the `.env` keys are supplied, the backend Rust handler (`/api/auth/oauth`) and frontend adapters will need to be enabled under `src/lib/api/client.ts`.
 
 ## 🛠 Tech Stack
 
