@@ -34,6 +34,12 @@ pub struct LoginInput {
     pub password: String,
 }
 
+#[derive(Debug, Deserialize, Validate)]
+pub struct UpdateProfileInput {
+    #[validate(length(min = 1, message = "Name is required"))]
+    pub name: String,
+}
+
 #[derive(Debug, Serialize)]
 pub struct AuthResponse {
     pub token: String,

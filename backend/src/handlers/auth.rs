@@ -5,7 +5,7 @@ use validator::Validate;
 use crate::{
     config::Config,
     errors::AppError,
-    models::user::{AuthResponse, LoginInput, RegisterInput, UserResponse},
+    models::user::{AuthResponse, LoginInput, RegisterInput, UpdateProfileInput, UserResponse},
     repositories::user as user_repo,
     services::auth::{create_token, hash_password, verify_password},
     middleware::auth::AuthUser,
@@ -66,4 +66,23 @@ pub async fn profile(
         .ok_or_else(|| AppError::NotFound("User not found".into()))?;
 
     Ok(Json(UserResponse::from(user)))
+}
+
+pub async fn update_profile(
+    Extension(pool): Extension<PgPool>,
+    Extension(auth): Extension<AuthUser>,
+    Json(input): Json<UpdateProfileInput>,
+) -> Result<Json<UserResponse>, AppError> {
+    input.validate().map_err(|e| AppError::BadRequest(e.to_string()))?;
+
+    // Make sure user exists
+    let _ = user_repo::find_by_id(&pool, auth.user_id)
+        .await?
+        .ok_or_else(|| AppError::NotFound("User not found".into()))?;
+
+    let updated_user = user_repo::update_name(&pool, auth.user_id, &input.name)
+        .await
+        .map_err(|_| AppError::Internal("Database error".into()))?;
+
+    Ok(Json(UserResponse::from(updated_user)))
 }

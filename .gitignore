@@ -1,0 +1,44 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Docker
+docker-compose.override.yml
+.docker-volumes/
+pgdata/
+db_data/
+
+# Backend (Rust/Cargo)
+backend/target/
+backend/**/target/
+backend/Cargo.lock
+
+# Frontend (Node.js/SvelteKit)
+frontend/node_modules/
+frontend/build/
+frontend/.svelte-kit/
+frontend/.output/
+frontend/.vercel/
+frontend/.netlify/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*

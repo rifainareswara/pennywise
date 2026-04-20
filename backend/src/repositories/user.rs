@@ -31,3 +31,17 @@ pub async fn create(
     .fetch_one(pool)
     .await
 }
+
+pub async fn update_name(
+    pool: &PgPool,
+    id: Uuid,
+    name: &str,
+) -> Result<User, sqlx::Error> {
+    sqlx::query_as::<_, User>(
+        "UPDATE users SET name = $1, updated_at = NOW() WHERE id = $2 RETURNING *"
+    )
+    .bind(name)
+    .bind(id)
+    .fetch_one(pool)
+    .await
+}

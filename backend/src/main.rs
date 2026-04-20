@@ -37,6 +37,7 @@ async fn main() {
     // Protected routes (auth required)
     let protected_routes = Router::new()
         .route("/api/auth/profile", get(handlers::auth::profile))
+        .route("/api/auth/profile", put(handlers::auth::update_profile))
         .route("/api/transactions", get(handlers::transactions::list))
         .route("/api/transactions", post(handlers::transactions::create))
         .route("/api/transactions/{id}", get(handlers::transactions::get_one))
