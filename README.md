@@ -2,7 +2,7 @@
 
 A fullstack personal finance application with an editorial-grade dark UI, built with **SvelteKit + Tailwind CSS** (frontend) and **Rust Axum + PostgreSQL** (backend). Fully localized for the Indonesian market with IDR (Rp) currency formatting and translated categories.
 
-## 🏗 Architecture
+## Architecture
 
 ```
 pennywise/
@@ -29,7 +29,7 @@ pennywise/
 └── .env.example
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - **Node.js** 20+
@@ -72,7 +72,7 @@ npm run dev
 docker compose up --build -d
 ```
 
-## 📱 Pages
+## Pages
 
 | Page | Route | Description |
 |------|-------|-------------|
@@ -90,7 +90,7 @@ docker compose up --build -d
 | Notifikasi | `/profile/notifications` | Local push notification preferences |
 | Bantuan | `/profile/help` | FAQ accordion |
 
-## 🔌 API Endpoints
+## API Endpoints
 
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
@@ -110,7 +110,7 @@ docker compose up --build -d
 | GET | `/api/dashboard/summary` | Yes | Aggregated dashboard data |
 | GET/POST/PUT/DEL | `/api/tasks` | Yes | Smart Task CRUD Operations |
 
-## 🎨 Design System
+## Design System
 
 Based on Material Design 3 dark theme with an editorial aesthetic:
 - **Primary**: `#54E98A` (growth green)
@@ -120,14 +120,14 @@ Based on Material Design 3 dark theme with an editorial aesthetic:
 - **Glass & gradient** CTAs with pill-shaped buttons
 - **Centered Floating Action Navigation** for quick transaction additions
 
-## 🔐 Security & Authentication
+## Security & Authentication
 
 - **Argon2** password hashing for native credentials
 - **JWT** Bearer token authentication (24h expiry)
 - **CORS** configured for frontend origin
 - **Input validation** on all endpoints
 
-### 🌐 Social Login (OAuth) - Placeholder
+### Social Login (OAuth) - Placeholder
 The login and registration interfaces currently feature buttons for **Google** and **Facebook** Single Sign-On (SSO). These features are visually complete but temporarily deactivated pending API credentials.
 
 **Prerequisites for Activation:**
@@ -142,7 +142,7 @@ FACEBOOK_APP_SECRET=your_facebook_secret_here
 ```
 Once the `.env` keys are supplied, the backend Rust handler (`/api/auth/oauth`) and frontend adapters will need to be enabled under `src/lib/api/client.ts`.
 
-## 🛠 Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |-------|------------|
@@ -152,7 +152,7 @@ Once the `.env` keys are supplied, the backend Rust handler (`/api/auth/oauth`) 
 | Auth | Argon2, JWT |
 | DevOps | Docker, Docker Compose |
 
-## 🔖 Release & Versioning
+## Release & Versioning
 
 PennyWise Frontend utilizes a **Dynamic Semantic Versioning** setup attached to SvelteKit's environment configurations.
 
