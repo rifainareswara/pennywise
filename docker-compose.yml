@@ -38,7 +38,8 @@ services:
       - "${FRONTEND_PORT:-5173}:${FRONTEND_PORT:-5173}"
     environment:
       PORT: ${FRONTEND_PORT:-5173}
-      VITE_API_URL: ${VITE_API_URL:-http://localhost:3000/api}
+      BACKEND_URL: http://backend:3000
+      VITE_API_URL: ${VITE_API_URL:-/api}
 
 volumes:
   pgdata:

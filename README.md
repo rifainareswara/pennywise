@@ -50,9 +50,10 @@ cp .env.example .env
 > FRONTEND_URL=http://localhost:8080
 > # Or allow multiple deployed frontend origins
 > # FRONTEND_URLS=http://localhost:8080,https://app.example.com
-> # Use a full URL only when the API is on another origin.
-> # If frontend and backend share the same domain, the frontend defaults to /api.
-> VITE_API_URL=http://localhost:8000/api
+> # Backend origin used by the frontend API proxy
+> BACKEND_URL=http://localhost:8000
+> # Frontend calls the same-origin API proxy by default
+> VITE_API_URL=/api
 > ```
 
 ### 2. Start PostgreSQL
@@ -137,6 +138,7 @@ Based on Material Design 3 dark theme with an editorial aesthetic:
 - **Argon2** password hashing for native credentials
 - **JWT** Bearer token authentication (24h expiry)
 - **CORS** configured for one or more frontend origins via `FRONTEND_URL` / `FRONTEND_URLS`
+- **Frontend API proxy** forwards `/api/*` to the backend origin from `BACKEND_URL`
 - **Input validation** on all endpoints
 
 ### Social Login (OAuth) - Placeholder
