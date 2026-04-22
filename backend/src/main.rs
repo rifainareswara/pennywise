@@ -12,7 +12,8 @@ use axum::{
     routing::{delete, get, post, put},
     Extension, Router,
 };
-use tower_http::cors::{Any, CorsLayer};
+use axum::http::HeaderValue;
+use tower_http::cors::{AllowOrigin, Any, CorsLayer};
 
 #[tokio::main]
 async fn main() {
@@ -24,10 +25,24 @@ async fn main() {
 
     tracing::info!("Database connected and migrations applied");
 
-    let cors = CorsLayer::new()
-        .allow_origin(config.frontend_url.parse::<axum::http::HeaderValue>().unwrap())
-        .allow_methods(Any)
-        .allow_headers(Any);
+    let allowed_origins = config
+        .frontend_urls
+        .iter()
+        .filter_map(|origin| origin.parse::<HeaderValue>().ok())
+        .collect::<Vec<_>>();
+
+    let cors = if allowed_origins.is_empty() {
+        tracing::warn!("No valid FRONTEND_URL or FRONTEND_URLS configured; allowing any origin for CORS");
+        CorsLayer::new()
+            .allow_origin(Any)
+            .allow_methods(Any)
+            .allow_headers(Any)
+    } else {
+        CorsLayer::new()
+            .allow_origin(AllowOrigin::list(allowed_origins))
+            .allow_methods(Any)
+            .allow_headers(Any)
+    };
 
     // Public routes (no auth)
     let public_routes = Router::new()

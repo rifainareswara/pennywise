@@ -6,12 +6,27 @@ pub struct Config {
     pub jwt_secret: String,
     pub server_host: String,
     pub server_port: u16,
-    pub frontend_url: String,
+    pub frontend_urls: Vec<String>,
 }
 
 impl Config {
     pub fn from_env() -> Self {
         dotenvy::dotenv().ok();
+
+        let frontend_urls = env::var("FRONTEND_URLS")
+            .ok()
+            .map(|value| {
+                value
+                    .split(',')
+                    .map(|url| url.trim().to_string())
+                    .filter(|url| !url.is_empty())
+                    .collect::<Vec<_>>()
+            })
+            .filter(|urls| !urls.is_empty())
+            .unwrap_or_else(|| {
+                vec![env::var("FRONTEND_URL").unwrap_or_else(|_| "http://localhost:5173".into())]
+            });
+
         Self {
             database_url: env::var("DATABASE_URL")
                 .unwrap_or_else(|_| "postgresql://pennywise:pennywise@localhost:5432/pennywise".into()),
@@ -22,8 +37,7 @@ impl Config {
                 .unwrap_or_else(|_| "3000".into())
                 .parse()
                 .unwrap_or(3000),
-            frontend_url: env::var("FRONTEND_URL")
-                .unwrap_or_else(|_| "http://localhost:5173".into()),
+            frontend_urls,
         }
     }
 }

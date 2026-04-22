@@ -43,6 +43,16 @@ cd pennywise
 cp .env.example .env
 ```
 
+> **Note:** If the default ports (`3000` for backend, `5173` for frontend) are already in use, you can safely change them by editing your `.env` file before building the app.
+> ```env
+> SERVER_PORT=8000
+> FRONTEND_PORT=8080
+> FRONTEND_URL=http://localhost:8080
+> # Or allow multiple deployed frontend origins
+> # FRONTEND_URLS=http://localhost:8080,https://app.example.com
+> VITE_API_URL=http://localhost:8000/api
+> ```
+
 ### 2. Start PostgreSQL
 ```bash
 # Option A: Docker
@@ -124,7 +134,7 @@ Based on Material Design 3 dark theme with an editorial aesthetic:
 
 - **Argon2** password hashing for native credentials
 - **JWT** Bearer token authentication (24h expiry)
-- **CORS** configured for frontend origin
+- **CORS** configured for one or more frontend origins via `FRONTEND_URL` / `FRONTEND_URLS`
 - **Input validation** on all endpoints
 
 ### Social Login (OAuth) - Placeholder

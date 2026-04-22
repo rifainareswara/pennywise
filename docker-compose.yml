@@ -21,22 +21,24 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "3000:3000"
+      - "${SERVER_PORT:-3000}:${SERVER_PORT:-3000}"
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-pennywise}:${POSTGRES_PASSWORD:-pennywise}@db:5432/${POSTGRES_DB:-pennywise}
       JWT_SECRET: ${JWT_SECRET:-pennywise-dev-secret-change-in-production}
       SERVER_HOST: 0.0.0.0
       SERVER_PORT: 3000
       FRONTEND_URL: http://localhost:5173
+      FRONTEND_URLS: ${FRONTEND_URLS:-http://localhost:5173}
 
   frontend:
     build: ./frontend
     depends_on:
       - backend
     ports:
-      - "5173:5173"
+      - "${FRONTEND_PORT:-5173}:${FRONTEND_PORT:-5173}"
     environment:
-      VITE_API_URL: http://localhost:3000/api
+      PORT: ${FRONTEND_PORT:-5173}
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:3000/api}
 
 volumes:
   pgdata:
