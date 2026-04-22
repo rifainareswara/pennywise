@@ -50,6 +50,8 @@ cp .env.example .env
 > FRONTEND_URL=http://localhost:8080
 > # Or allow multiple deployed frontend origins
 > # FRONTEND_URLS=http://localhost:8080,https://app.example.com
+> # Use a full URL only when the API is on another origin.
+> # If frontend and backend share the same domain, the frontend defaults to /api.
 > VITE_API_URL=http://localhost:8000/api
 > ```
 
