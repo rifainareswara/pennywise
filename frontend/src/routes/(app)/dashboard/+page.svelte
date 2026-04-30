@@ -25,7 +25,10 @@
         total_income: '12500000',
         total_expenses: '4750000',
         balance_change_percent: 12.5,
-        weekly_activity: [320000, 520000, 720000, 240000, 440000, 600000, 360000],
+        weekly_income: [0, 8500000, 0, 0, 4000000, 0, 0],
+        weekly_expenses: [320000, 520000, 720000, 240000, 440000, 600000, 360000],
+        avg_daily_income: 4250000,
+        avg_daily_expense: 457142,
         recent_transactions: [
           { id: '1', user_id: '', amount: '185000', category: 'Groceries', description: 'Belanja Supermarket', transaction_type: 'expense', icon: 'shopping_cart', date: new Date().toISOString(), created_at: '' },
           { id: '2', user_id: '', amount: '54000', category: 'Entertainment', description: 'Netflix Premium', transaction_type: 'expense', icon: 'subscriptions', date: new Date(Date.now() - 86400000).toISOString(), created_at: '' },
@@ -59,7 +62,12 @@
     </section>
 
     <!-- Weekly Activity Chart -->
-    <WeeklyChart data={summary.weekly_activity} average="457000" />
+    <WeeklyChart
+      incomeData={summary.weekly_income}
+      expenseData={summary.weekly_expenses}
+      avgIncome={summary.avg_daily_income}
+      avgExpense={summary.avg_daily_expense}
+    />
 
     <!-- Recent Transactions -->
     <section class="space-y-4">

@@ -19,14 +19,20 @@
         <span class="text-primary font-headline text-2xl font-bold">Rp</span>
         <h2 class="text-on-surface font-headline text-[3rem] leading-none font-extrabold tracking-tighter">{parseFloat(balance).toLocaleString('id-ID')}</h2>
       </div>
-      <div class="mt-8 flex items-center gap-2">
-        <div class="flex items-center text-sm font-semibold px-3 py-1 rounded-full {isPositive ? 'text-primary bg-primary/10' : 'text-secondary bg-secondary/10'}">
-          <span class="material-symbols-outlined text-sm mr-1">
-            {isPositive ? 'trending_up' : 'trending_down'}
-          </span>
-          {isPositive ? '+' : ''}{changePercent.toFixed(1)}%
+      <div class="mt-8 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="flex items-center text-sm font-semibold px-3 py-1 rounded-full {isPositive ? 'text-primary bg-primary/10' : 'text-secondary bg-secondary/10'}">
+            <span class="material-symbols-outlined text-sm mr-1">
+              {isPositive ? 'trending_up' : 'trending_down'}
+            </span>
+            {isPositive ? '+' : ''}{changePercent.toFixed(1)}%
+          </div>
+          <span class="text-on-surface-variant text-xs font-label">vs bulan lalu</span>
         </div>
-        <span class="text-on-surface-variant text-xs font-label">vs bulan lalu</span>
+        <a href="/wallet" class="flex items-center gap-1 text-xs text-primary font-semibold hover:opacity-80 active:scale-95 transition-all">
+          Kelola Rekening
+          <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+        </a>
       </div>
     </div>
   </div>

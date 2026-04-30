@@ -119,6 +119,15 @@ export const dashboardApi = {
   summary: () => api<DashboardSummary>('/dashboard/summary'),
 };
 
+// Wallets API
+export const walletsApi = {
+  list: () => api<Wallet[]>('/wallets'),
+  create: (data: WalletInput) => api<Wallet>('/wallets', { method: 'POST', body: data }),
+  update: (id: string, data: WalletInput) => api<Wallet>(`/wallets/${id}`, { method: 'PUT', body: data }),
+  adjust: (id: string, balance: number) => api<Wallet>(`/wallets/${id}/adjust`, { method: 'PUT', body: { balance } }),
+  delete: (id: string) => api(`/wallets/${id}`, { method: 'DELETE' }),
+};
+
 // Types
 export interface User {
   id: string;
@@ -138,6 +147,7 @@ export interface Transaction {
   icon: string;
   date: string;
   created_at: string;
+  wallet_id?: string;
 }
 
 export interface TransactionInput {
@@ -147,6 +157,7 @@ export interface TransactionInput {
   transaction_type: 'income' | 'expense';
   icon?: string;
   date?: string;
+  wallet_id?: string;
 }
 
 export interface Budget {
@@ -168,11 +179,34 @@ export interface BudgetInput {
   year: number;
 }
 
+export interface Wallet {
+  id: string;
+  user_id: string;
+  name: string;
+  wallet_type: 'bank' | 'e_wallet' | 'cash';
+  balance: string;
+  icon: string | null;
+  color: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface WalletInput {
+  name: string;
+  wallet_type: string;
+  balance: number;
+  icon?: string;
+  color?: string;
+}
+
 export interface DashboardSummary {
   total_balance: string;
   total_income: string;
   total_expenses: string;
   balance_change_percent: number;
-  weekly_activity: number[];
+  weekly_income: number[];
+  weekly_expenses: number[];
+  avg_daily_income: number;
+  avg_daily_expense: number;
   recent_transactions: Transaction[];
 }

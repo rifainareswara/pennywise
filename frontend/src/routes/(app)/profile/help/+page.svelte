@@ -33,7 +33,7 @@
   <title>Bantuan — PennyWise</title>
 </svelte:head>
 
-<Navbar title="Bantuan & Dukungan" showAvatar={false} />
+<Navbar title="Bantuan & Dukungan" showBack={true} />
 
 <main class="px-6 pt-4 max-w-lg mx-auto pb-20 page-transition">
   <div class="mt-6 mb-8">

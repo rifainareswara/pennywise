@@ -68,6 +68,9 @@ async fn main() {
         .route("/api/tasks/{id}", get(handlers::tasks::get))
         .route("/api/tasks/{id}", put(handlers::tasks::update))
         .route("/api/tasks/{id}", delete(handlers::tasks::delete))
+        .route("/api/wallets", get(handlers::wallets::list).post(handlers::wallets::create))
+        .route("/api/wallets/{id}", put(handlers::wallets::update).delete(handlers::wallets::delete))
+        .route("/api/wallets/{id}/adjust", put(handlers::wallets::adjust_balance))
         .layer(from_fn(middleware::auth::auth_middleware));
 
     let app = Router::new()

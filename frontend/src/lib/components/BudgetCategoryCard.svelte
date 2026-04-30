@@ -49,18 +49,7 @@
   }
 </script>
 
-<div class="bg-surface-container-high rounded-lg p-6 relative group">
-  {#if budget.user_id}
-    <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-      <button class="text-on-surface-variant hover:text-primary transition-colors disabled:opacity-50" onclick={() => onedit?.(budget)} disabled={loading}>
-        <span class="material-symbols-outlined text-[18px]">edit</span>
-      </button>
-      <button class="text-on-surface-variant hover:text-secondary transition-colors disabled:opacity-50" onclick={handleDelete} disabled={loading}>
-        <span class="material-symbols-outlined text-[18px]">delete</span>
-      </button>
-    </div>
-  {/if}
-
+<div class="bg-surface-container-high rounded-lg p-6">
   <div class="flex justify-between items-start mb-4">
     <div class="flex items-center gap-4">
       <div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center">
@@ -88,7 +77,27 @@
         {/if}
       </div>
     </div>
-    <div class="text-right">
+    <div class="flex flex-col items-end gap-1">
+      {#if budget.user_id}
+        <div class="flex gap-1 mb-1">
+          <button
+            class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors disabled:opacity-50"
+            onclick={() => onedit?.(budget)}
+            disabled={loading}
+            aria-label="Edit"
+          >
+            <span class="material-symbols-outlined text-[16px]">edit</span>
+          </button>
+          <button
+            class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-secondary transition-colors disabled:opacity-50"
+            onclick={handleDelete}
+            disabled={loading}
+            aria-label="Hapus"
+          >
+            <span class="material-symbols-outlined text-[16px]">delete</span>
+          </button>
+        </div>
+      {/if}
       <p class="font-bold" class:text-secondary={isOverLimit} class:text-on-surface={!isOverLimit}>
         {formatRupiah(spent)}
       </p>

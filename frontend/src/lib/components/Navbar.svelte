@@ -1,14 +1,30 @@
 <script lang="ts">
-  let { title = 'PennyWise', showAvatar = true, actions = [] }: {
+  import { goto } from '$app/navigation';
+
+  let { title = 'PennyWise', showAvatar = true, showBack = false, backHref = '', actions = [] }: {
     title?: string;
     showAvatar?: boolean;
+    showBack?: boolean;
+    backHref?: string;
     actions?: Array<{ icon: string; onClick?: () => void; href?: string }>;
   } = $props();
+
+  function handleBack() {
+    if (backHref) {
+      goto(backHref);
+    } else {
+      history.back();
+    }
+  }
 </script>
 
 <header class="w-full top-0 sticky z-50 bg-[#131313] flex justify-between items-center px-6 py-4">
   <div class="flex items-center gap-3">
-    {#if showAvatar}
+    {#if showBack}
+      <button onclick={handleBack} class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface active:scale-95 transition-all duration-200" aria-label="Kembali">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </button>
+    {:else if showAvatar}
       <a href="/profile" class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high flex items-center justify-center active:scale-95 duration-200">
         <div class="w-full h-full bg-primary/20 flex items-center justify-center">
           <span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">person</span>

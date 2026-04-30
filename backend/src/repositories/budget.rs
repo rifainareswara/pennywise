@@ -70,3 +70,34 @@ pub async fn delete(pool: &PgPool, id: Uuid, user_id: Uuid) -> Result<u64, sqlx:
         .await?;
     Ok(result.rows_affected())
 }
+
+pub async fn recalculate_spent(
+    pool: &PgPool,
+    user_id: Uuid,
+    category: &str,
+    month: i32,
+    year: i32,
+) -> Result<(), sqlx::Error> {
+    sqlx::query(
+        "UPDATE budgets
+         SET spent_amount = COALESCE((
+             SELECT SUM(amount) FROM transactions
+             WHERE user_id = $1
+               AND LOWER(category) = LOWER($2)
+               AND transaction_type = 'expense'
+               AND EXTRACT(MONTH FROM date) = $5
+               AND EXTRACT(YEAR FROM date) = $6
+         ), 0),
+         updated_at = NOW()
+         WHERE user_id = $1 AND LOWER(category) = LOWER($2) AND month = $3 AND year = $4",
+    )
+    .bind(user_id)
+    .bind(category)
+    .bind(month)
+    .bind(year)
+    .bind(month as f64)
+    .bind(year as f64)
+    .execute(pool)
+    .await?;
+    Ok(())
+}

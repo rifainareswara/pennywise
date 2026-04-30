@@ -15,6 +15,7 @@ pub struct Transaction {
     pub transaction_type: String,
     pub icon: Option<String>,
     pub date: Option<DateTime<Utc>>,
+    pub wallet_id: Option<Uuid>,
     pub created_at: Option<DateTime<Utc>>,
     pub updated_at: Option<DateTime<Utc>>,
 }
@@ -30,6 +31,7 @@ pub struct TransactionInput {
     pub transaction_type: String,
     pub icon: Option<String>,
     pub date: Option<String>,
+    pub wallet_id: Option<String>,
 }
 
 fn validate_transaction_type(value: &str) -> Result<(), validator::ValidationError> {

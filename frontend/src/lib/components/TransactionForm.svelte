@@ -1,8 +1,11 @@
 <script lang="ts">
   import { createTransaction, updateTransaction } from '$lib/stores/transactions';
+  import { wallets, loadWallets } from '$lib/stores/wallets';
   import { addToast } from '$lib/stores/ui';
+  import { formatRupiah } from '$lib/utils/currency';
   import type { Transaction, TransactionInput } from '$lib/api/client';
   import { goto } from '$app/navigation';
+  import { onMount } from 'svelte';
 
   let { transaction, mode = 'create' }: {
     transaction?: Transaction;
@@ -16,6 +19,7 @@
   let transactionType = $state<'income' | 'expense'>(transaction?.transaction_type || 'expense');
   let icon = $state(transaction?.icon || 'payments');
   let date = $state(transaction?.date ? new Date(transaction.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]);
+  let selectedWalletId = $state(transaction?.wallet_id || '');
 
   const categories = [
     { label: 'Food & Dining', value: 'Food & Dining', icon: 'restaurant' },
@@ -28,6 +32,10 @@
     { label: 'Freelance', value: 'Freelance', icon: 'account_balance_wallet' },
     { label: 'Other', value: 'Other', icon: 'category' },
   ];
+
+  onMount(() => {
+    loadWallets();
+  });
 
   function selectCategory(cat: typeof categories[0]) {
     category = cat.value;
@@ -50,6 +58,7 @@
         transaction_type: transactionType,
         icon,
         date: new Date(date).toISOString(),
+        wallet_id: selectedWalletId || undefined,
       };
 
       if (mode === 'edit' && transaction) {
@@ -130,6 +139,35 @@
       {/each}
     </div>
   </div>
+
+  <!-- Wallet (shown only when wallets exist) -->
+  {#if $wallets.length > 0}
+    <div>
+      <label class="text-xs uppercase tracking-widest text-on-surface-variant font-label mb-3 block">Rekening</label>
+      <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+        <!-- None option -->
+        <button
+          type="button"
+          class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all duration-200 whitespace-nowrap {selectedWalletId === '' ? 'bg-primary/15 text-primary border border-primary/30' : 'bg-surface-container-low text-on-surface-variant'}"
+          onclick={() => selectedWalletId = ''}
+        >
+          <span class="material-symbols-outlined text-[16px]">do_not_disturb_on</span>
+          <span>Tidak ada</span>
+        </button>
+        {#each $wallets as wallet}
+          <button
+            type="button"
+            class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all duration-200 whitespace-nowrap {selectedWalletId === wallet.id ? 'bg-primary/15 text-primary border border-primary/30' : 'bg-surface-container-low text-on-surface-variant'}"
+            onclick={() => selectedWalletId = wallet.id}
+          >
+            <span class="material-symbols-outlined text-[16px]">{wallet.icon ?? 'account_balance_wallet'}</span>
+            <span>{wallet.name}</span>
+            <span class="text-[11px] opacity-60">{formatRupiah(parseFloat(wallet.balance))}</span>
+          </button>
+        {/each}
+      </div>
+    </div>
+  {/if}
 
   <!-- Date -->
   <div>

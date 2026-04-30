@@ -76,10 +76,11 @@ pub async fn create(
     transaction_type: &str,
     icon: Option<&str>,
     date: Option<chrono::DateTime<chrono::Utc>>,
+    wallet_id: Option<Uuid>,
 ) -> Result<Transaction, sqlx::Error> {
     sqlx::query_as::<_, Transaction>(
-        "INSERT INTO transactions (user_id, amount, category, description, transaction_type, icon, date) 
-         VALUES ($1, $2, $3, $4, $5, $6, COALESCE($7, NOW())) 
+        "INSERT INTO transactions (user_id, amount, category, description, transaction_type, icon, date, wallet_id)
+         VALUES ($1, $2, $3, $4, $5, $6, COALESCE($7, NOW()), $8)
          RETURNING *",
     )
     .bind(user_id)
@@ -89,6 +90,7 @@ pub async fn create(
     .bind(transaction_type)
     .bind(icon)
     .bind(date)
+    .bind(wallet_id)
     .fetch_one(pool)
     .await
 }
@@ -103,10 +105,11 @@ pub async fn update(
     transaction_type: &str,
     icon: Option<&str>,
     date: Option<chrono::DateTime<chrono::Utc>>,
+    wallet_id: Option<Uuid>,
 ) -> Result<Transaction, sqlx::Error> {
     sqlx::query_as::<_, Transaction>(
-        "UPDATE transactions SET amount = $3, category = $4, description = $5, 
-         transaction_type = $6, icon = $7, date = COALESCE($8, date), updated_at = NOW()
+        "UPDATE transactions SET amount = $3, category = $4, description = $5,
+         transaction_type = $6, icon = $7, date = COALESCE($8, date), wallet_id = $9, updated_at = NOW()
          WHERE id = $1 AND user_id = $2 RETURNING *",
     )
     .bind(id)
@@ -117,6 +120,7 @@ pub async fn update(
     .bind(transaction_type)
     .bind(icon)
     .bind(date)
+    .bind(wallet_id)
     .fetch_one(pool)
     .await
 }
@@ -162,8 +166,33 @@ pub async fn get_weekly_activity(
         )
         SELECT COALESCE(SUM(t.amount), 0) AS total
         FROM days d
-        LEFT JOIN transactions t ON date_trunc('day', t.date) = d.day 
+        LEFT JOIN transactions t ON date_trunc('day', t.date) = d.day
             AND t.user_id = $1 AND t.transaction_type = 'expense'
+        GROUP BY d.day ORDER BY d.day",
+    )
+    .bind(user_id)
+    .fetch_all(pool)
+    .await?;
+
+    Ok(rows.into_iter().map(|r| r.0.unwrap_or_default()).collect())
+}
+
+pub async fn get_weekly_income(
+    pool: &PgPool,
+    user_id: Uuid,
+) -> Result<Vec<Decimal>, sqlx::Error> {
+    let rows: Vec<(Option<Decimal>,)> = sqlx::query_as(
+        "WITH days AS (
+            SELECT generate_series(
+                date_trunc('week', NOW()),
+                date_trunc('week', NOW()) + interval '6 days',
+                interval '1 day'
+            ) AS day
+        )
+        SELECT COALESCE(SUM(t.amount), 0) AS total
+        FROM days d
+        LEFT JOIN transactions t ON date_trunc('day', t.date) = d.day
+            AND t.user_id = $1 AND t.transaction_type = 'income'
         GROUP BY d.day ORDER BY d.day",
     )
     .bind(user_id)

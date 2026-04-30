@@ -1,5 +1,7 @@
 import { writable, derived } from 'svelte/store';
 import { transactionsApi, type Transaction, type TransactionInput } from '$lib/api/client';
+import { loadBudgets } from '$lib/stores/budgets';
+import { loadWallets } from '$lib/stores/wallets';
 
 export const transactions = writable<Transaction[]>([]);
 export const transactionsLoading = writable(false);
@@ -65,16 +67,22 @@ export async function loadTransactions(params?: { search?: string; type?: string
 export async function createTransaction(data: TransactionInput) {
   const result = await transactionsApi.create(data);
   transactions.update((list) => [result, ...list]);
+  loadBudgets();
+  loadWallets();
   return result;
 }
 
 export async function updateTransaction(id: string, data: TransactionInput) {
   const result = await transactionsApi.update(id, data);
   transactions.update((list) => list.map((t) => (t.id === id ? result : t)));
+  loadBudgets();
+  loadWallets();
   return result;
 }
 
 export async function deleteTransaction(id: string) {
   await transactionsApi.delete(id);
   transactions.update((list) => list.filter((t) => t.id !== id));
+  loadBudgets();
+  loadWallets();
 }

@@ -38,7 +38,7 @@
   <title>Notifikasi — PennyWise</title>
 </svelte:head>
 
-<Navbar title="Pengaturan Notifikasi" showAvatar={false} />
+<Navbar title="Pengaturan Notifikasi" showBack={true} />
 
 <main class="px-6 pt-4 max-w-lg mx-auto page-transition">
   <div class="p-4 bg-secondary/10 rounded-2xl border border-secondary/20 flex flex-col gap-2 mt-6 mb-6">

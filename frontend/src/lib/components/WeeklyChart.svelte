@@ -1,47 +1,89 @@
 <script lang="ts">
   import { formatRupiah } from '$lib/utils/currency';
 
-  let { data = [], average = '0' }: {
-    data?: number[];
-    average?: string;
+  let { incomeData = [], expenseData = [], avgIncome = 0, avgExpense = 0 }: {
+    incomeData?: number[];
+    expenseData?: number[];
+    avgIncome?: number;
+    avgExpense?: number;
   } = $props();
 
   const days = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
 
-  let maxVal = $derived(Math.max(...data, 1));
+  let maxVal = $derived(Math.max(...incomeData, ...expenseData, 1));
+
   let bars = $derived(
-    data.map((val, i) => ({
-      day: days[i] || `H${i + 1}`,
-      height: Math.max((val / maxVal) * 100, 5),
-      value: val,
-      isHighest: val === maxVal && val > 0,
+    days.map((day, i) => ({
+      day,
+      income: incomeData[i] ?? 0,
+      expense: expenseData[i] ?? 0,
+      incomeHeight: Math.max(((incomeData[i] ?? 0) / maxVal) * 100, (incomeData[i] ?? 0) > 0 ? 4 : 0),
+      expenseHeight: Math.max(((expenseData[i] ?? 0) / maxVal) * 100, (expenseData[i] ?? 0) > 0 ? 4 : 0),
     }))
   );
 </script>
 
-<section class="bg-surface-container-low p-8 rounded-xl">
-  <div class="flex justify-between items-end mb-8">
-    <div>
-      <h3 class="font-headline text-xl font-bold text-on-surface">Aktivitas Mingguan</h3>
-      <p class="text-on-surface-variant text-sm mt-1">Rata-rata {formatRupiah(average)} / hari</p>
-    </div>
-    <div class="flex gap-2">
-      <span class="w-2 h-2 rounded-full bg-primary"></span>
-      <span class="w-2 h-2 rounded-full bg-surface-container-highest"></span>
+<section class="bg-surface-container-low p-6 rounded-xl">
+  <div class="flex justify-between items-start mb-6">
+    <h3 class="font-headline text-xl font-bold text-on-surface">Aktivitas Mingguan</h3>
+    <div class="flex flex-col gap-1.5 items-end">
+      <div class="flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+        <span class="text-[11px] text-on-surface-variant">Pemasukan</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+        <span class="text-[11px] text-on-surface-variant">Pengeluaran</span>
+      </div>
     </div>
   </div>
+
+  <!-- Averages -->
+  <div class="flex gap-6 mb-6">
+    <div>
+      <p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-label mb-0.5">Rata-rata / hari</p>
+      <p class="text-sm font-bold text-primary">{formatRupiah(avgIncome)}</p>
+    </div>
+    <div class="w-px bg-outline-variant/30"></div>
+    <div>
+      <p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-label mb-0.5">Rata-rata / hari</p>
+      <p class="text-sm font-bold text-secondary">{formatRupiah(avgExpense)}</p>
+    </div>
+  </div>
+
   <!-- Bar Chart -->
-  <div class="flex items-end justify-between h-40 gap-3">
+  <div class="flex items-end justify-between h-36 gap-1">
     {#each bars as bar}
-      <div
-        class="flex-1 rounded-t-lg relative group cursor-pointer transition-colors {bar.isHighest ? 'bg-primary' : 'bg-surface-container-high hover:bg-surface-container-highest'}"
-        style="height: {bar.height}%;"
-      >
-        <span
-          class="absolute -top-8 left-1/2 -translate-x-1/2 text-[10px] font-label transition-opacity {bar.isHighest ? 'text-on-surface font-bold' : 'text-on-surface-variant opacity-0 group-hover:opacity-100'}"
-        >
-          {bar.day}
-        </span>
+      <div class="flex-1 flex flex-col items-center gap-1.5 h-full">
+        <!-- Bars container -->
+        <div class="w-full flex items-end justify-center gap-0.5 flex-1">
+          <!-- Income bar -->
+          <div class="flex-1 relative group">
+            <div
+              class="w-full rounded-t-md bg-primary/70 hover:bg-primary transition-colors"
+              style="height: {bar.incomeHeight}%; min-height: {bar.income > 0 ? '3px' : '0px'};"
+            ></div>
+            {#if bar.income > 0}
+              <span class="absolute -top-5 left-1/2 -translate-x-1/2 text-[9px] text-primary font-bold opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                {formatRupiah(bar.income)}
+              </span>
+            {/if}
+          </div>
+          <!-- Expense bar -->
+          <div class="flex-1 relative group">
+            <div
+              class="w-full rounded-t-md bg-secondary/70 hover:bg-secondary transition-colors"
+              style="height: {bar.expenseHeight}%; min-height: {bar.expense > 0 ? '3px' : '0px'};"
+            ></div>
+            {#if bar.expense > 0}
+              <span class="absolute -top-5 left-1/2 -translate-x-1/2 text-[9px] text-secondary font-bold opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                {formatRupiah(bar.expense)}
+              </span>
+            {/if}
+          </div>
+        </div>
+        <!-- Day label -->
+        <span class="text-[10px] font-label text-on-surface-variant">{bar.day}</span>
       </div>
     {/each}
   </div>

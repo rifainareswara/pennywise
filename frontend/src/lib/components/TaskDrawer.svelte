@@ -97,9 +97,19 @@
     <!-- Handle -->
     <div class="w-12 h-1.5 bg-outline rounded-full mx-auto mb-6"></div>
 
-    <h2 class="font-title text-2xl text-on-surface mb-6">
-      {task ? 'Edit Tugas' : 'Tambah Tugas Baru'}
-    </h2>
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="font-title text-2xl text-on-surface">
+        {task ? 'Edit Tugas' : 'Tambah Tugas Baru'}
+      </h2>
+      <button
+        onclick={onClose}
+        class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"
+        type="button"
+        aria-label="Tutup"
+      >
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
 
     <div class="flex flex-col gap-5">
       <!-- Task Type Chips -->

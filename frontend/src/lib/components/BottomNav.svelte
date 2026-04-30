@@ -3,7 +3,7 @@
 
   const tabs = [
     { icon: 'dashboard', label: 'Beranda', href: '/dashboard', filled: true },
-    { icon: 'task_alt', label: 'Tugas', href: '/tasks', filled: true },
+    { icon: 'account_balance_wallet', label: 'Dompet', href: '/wallet', filled: true },
     { icon: 'add', label: '', href: '/transactions/new', isPlaceholder: true },
     { icon: 'pie_chart', label: 'Anggaran', href: '/budget', filled: false },
     { icon: 'person', label: 'Profil', href: '/profile', filled: false },

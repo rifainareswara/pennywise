@@ -43,7 +43,7 @@
   <title>Keamanan — PennyWise</title>
 </svelte:head>
 
-<Navbar title="Ubah Sandi" showAvatar={false} />
+<Navbar title="Ubah Sandi" showBack={true} />
 
 <main class="px-6 pt-4 max-w-lg mx-auto page-transition">
   <form onsubmit={handleSave} class="flex flex-col gap-5 mt-6">
